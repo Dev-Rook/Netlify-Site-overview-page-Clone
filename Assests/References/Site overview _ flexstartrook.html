@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<!-- saved from url=(0052)https://app.netlify.com/sites/flexstartrook/overview -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <title>Site overview | flexstartrook</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="preconnect" href="https://d33wubrfki0l68.cloudfront.net/" crossorigin="">
+    <link rel="preconnect" href="https://api.netlify.com/" crossorigin="">
+    <link rel="preconnect" href="https://api.commandbar.com/" crossorigin="">
+    <link rel="preconnect" href="https://screenshot-proxy.netlify.app/" crossorigin="">
+    <link rel="preload" href="./Site overview _ flexstartrook_files/app.bundle.js.download" as="script">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://www.netlify.com/img/global/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="https://app.netlify.com/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://app.netlify.com/favicon-16x16.png" sizes="16x16">
+    <link rel="stylesheet" href="./Site overview _ flexstartrook_files/app.css" id="app-styles" onerror="this.failedToLoad=true;">
+
+    <script type="text/javascript" async="" src="./Site overview _ flexstartrook_files/analytics.min.js.download"></script><script>
+      (function(){
+
+        const sensitiveKeys = ['access_token', 'token'];
+        const hash = window.location.hash;
+        const sensitiveValues = window.location.hash ? sensitiveKeys.reduce((vals, key) => {
+          const matches = new RegExp(`${key}=([\\w-]+)`, 'gi').exec(hash) || [];
+          if(matches.length > 1){
+            vals = vals.concat(matches.slice(1));
+          }
+          return vals;
+        }, []) : [];
+
+        const redactedReplacements = sensitiveValues.map(val=> val.replace(/./g, 'X'));
+
+        function redactSensitiveValues(dirtyString){
+          return sensitiveValues.reduce((cleanString, sensitiveVal, sensitiveValIndex)=>{
+            return cleanString.split(sensitiveVal).join(redactedReplacements[sensitiveValIndex]);
+          }, dirtyString);
+        }
+
+        function isURLInternal(urlString){
+          const url = new URL(urlString, location.origin);
+          let internal = true;
+          if (url && !url.hostname.includes('netli') && !url.origin.includes('//localhost') && !url.hostname.includes('onegraph')) {
+            internal = false;
+          }
+          // uses netlify subdomain
+          if(url.hostname.includes('qualtrics')){
+            internal = false;
+          }
+          return internal;
+        }
+
+        if(sensitiveValues.length > 0){
+          if(window.fetch){
+            let originalFetch = window.fetch;
+            try{
+              window.fetch = function(resource, config){
+                try{
+
+                  let url;
+                  if(typeof resource === 'string'){
+                    url = new URL(resource, location.origin);
+                    resource = redactSensitiveValues(resource);
+                  }else if(typeof resource === 'object' && resource instanceof URL){
+                    url = resource;
+                    resource.pathname = redactSensitiveValues(resource.pathname);
+                  }else{
+                    // for now we don't see need to support other types such as Request constructor
+                  }
+
+                  if(!isURLInternal(url)){
+                    // for now, only change string bodies - this should be sufficient for the usage
+                    //  we've seen by 3rd parties
+                    if (typeof config?.body === 'string') {
+                      config.body = redactSensitiveValues(config.body);
+                    }
+                  }
+                } catch (e) {
+                  console.error(e);
+                  window.fetch = originalFetch;
+                }
+                return originalFetch(resource, config);
+              }
+            }catch(e){
+              console.error(e);
+              window.fetch = originalFetch;
+            }
+          }
+
+          // Image info redactor
+          try{
+            const prototypeRef = HTMLImageElement.prototype;
+            const originalDescriptor = Object.getOwnPropertyDescriptor(prototypeRef, 'src');
+            Object.defineProperty(prototypeRef, 'src', Object.assign({}, originalDescriptor, {
+              set: function (value) {
+                if(typeof value === 'string' && !isURLInternal(value)){
+                  value = redactSensitiveValues(value);
+                }
+                return originalDescriptor.set.call(this, value);
+              }
+            }));
+          }catch (e) {
+            console.error(e);
+          }
+
+          // XHR info redactor
+          try{
+            const originalOpen = XMLHttpRequest.prototype.open;
+            const originalSend = XMLHttpRequest.prototype.send;
+
+            XMLHttpRequest.prototype.open = function(method, url, async, user, password){
+              try {
+                if (!isURLInternal(url)) {
+                  this._ntl_redact_check_ = true;
+                }
+              } catch (e) {
+                console.error(e);
+              }
+              return originalOpen.call(this, method, url, async, user, password);
+            }
+
+            XMLHttpRequest.prototype.send = function (body) {
+              try {
+                // only inspect flagged xhr bodies
+                if (this._ntl_redact_check_) {
+                  if(typeof body === 'string'){
+                    body = redactSensitiveValues(body);
+                  }else if(body instanceof FormData){
+                    for(let [key, val] of body){
+                      if(typeof val === 'string'){
+                        body.set(key, redactSensitiveValues(val));
+                      }
+                    }
+                  }
+                }
+              } catch (e) {
+                console.error(e);
+              }
+              return originalSend.call(this, body);
+            }
+          }catch (e) {
+            console.error(e);
+          }
+        }
+      })();
+    </script>
+  <script type="text/javascript">
+  if (window.location.host === "app.netlify.com") { 
+    !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","reset","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.1.0";
+    analytics.load("bHbADSxnRvrpFMYP6pMNP38JC4J7Av75");}}();
+  }
+</script><meta name="google-site-verification" content="G4JqDTXMHpDyWoqIRwgw8PBqg-AncXqtdkHehcOR7kc"><link rel="prefetch" as="script" href="https://app.netlify.com/framework-info.bundle.js"><style id="inert-style">
+[inert] {
+  pointer-events: none;
+  cursor: default;
+}
+
+[inert], [inert] * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+</style><style>#commandbar-wrapper *,
+#commandbar-wrapper *:before,
+#commandbar-wrapper *:after {
+  box-sizing: border-box;
+}
+
+.commandbar-modal > .rc-dialog > .rc-dialog-content {
+  background-color: transparent;
+  /* Enables 3d animations within the bar */
+  perspective: 100px;
+}
+
+.commandbar-tooltip {
+  z-index: 2147483647 !important; /*make the tooltip the highest possible z index*/
+}
+
+/*** Hack: Hide this because it's less flexible (classnames can't be changes)
+    Instead we only show its children, by translating its children ***/
+.commandbar-modal > .rc-dialog > .rc-dialog-content > .rc-dialog-header {
+  max-height: 0px !important;
+  padding: 0px !important;
+}
+
+.commandbar-modal > .rc-dialog {
+  left: 0px;
+  transition: left 0.3s;
+}
+
+.commandbar-modal > .rc-dialog > .rc-dialog-content > .rc-dialog-body {
+  position: relative !important;
+}
+
+/* TestMode inline CommandBar */
+.commandbar-modal-inline.rc-dialog-wrap {
+  position: relative;
+  height: 100%;
+}
+
+#commandbar-container > div {
+  height: 100%;
+}
+
+#commandbar-home > .rc-dialog-root {
+  height: 100%;
+}
+
+#commandbar-wrapper .rc-header-guidance {
+  background: rgba(174, 177, 221, 1) !important;
+  filter: brightness(135%);
+  border-radius: 2px 2px 0px 0px !important;
+  border-bottom: 0px !important;
+  padding: 8px 30px 2px 30px !important;
+  margin: 0px 10px 0px 10px;
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 3px 10px !important;
+  font-weight: 400;
+  text-align: center;
+}
+
+@keyframes fontbulger {
+  0% {
+    font-size: 10px;
+  }
+  30% {
+    font-size: 15px;
+  }
+  100% {
+    font-size: 12px;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: top left;
+  }
+  100% {
+    background-position: top right;
+  }
+}
+
+.commandbar-category-collapse {
+  transform: scale(1, -1);
+  transition: 0.3s ease-in;
+  cursor: pointer;
+}
+
+.commandbar-category-expand {
+  transition: 0.3s ease-in;
+  cursor: pointer;
+}
+</style><style>/*** Guidance banner styling and animation ***/
+@keyframes example {
+  from {
+    transform: translateY(0px);
+  }
+  to {
+    transform: translateY(-30px);
+  }
+}
+
+.rc-header-guidance {
+  animation: example 0.5s; /* IE 10+, Fx 29+ */
+  -webkit-animation: example 0.5s; /* Safari 4+ */
+  -moz-animation: example 0.5s; /* Fx 5+ */
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards; /* Safari 4+ */
+  -moz-animation-fill-mode: forwards; /* Fx 5+ */
+}
+
+/*** CommandBar entry animation ***/
+/*** We can't do exit animation because rc-dialog makes display: none ***/
+@keyframes onEntry {
+  0% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.commandbar-opened {
+  animation: onEntry 0.1s; /* IE 10+, Fx 29+ */
+  -webkit-animation: onEntry 0.1s; /* Safari 4+ */
+  -moz-animation: onEntry 0.1s; /* Fx 5+ */
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards; /*   Safari 4+ */
+  -moz-animation-fill-mode: forwards; /*  Fx 5+ */
+}
+
+@keyframes onSelect {
+  0% {
+    transform: translate3d(0px, 0px, 0px);
+  }
+  50% {
+    transform: translate3d(0px, 0px, -0.5px);
+  }
+  100% {
+    transform: translate3d(0px, 0px, 0px);
+  }
+}
+
+.commandbar-selected {
+  animation: onSelect 0.4s; /* IE 10+, Fx 29+ */
+  -webkit-animation: onSelect 0.4s; /* Safari 4+ */
+  -moz-animation: onSelect 0.4s; /* Fx 5+ */
+}
+
+@keyframes ScaleEntry {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.commandbar-scale-entry-animation {
+  animation: ScaleEntry 0.3s; /* IE 10+, Fx 29+ */
+  -webkit-animation: ScaleEntry 0.3s; /* Safari 4+ */
+  -moz-animation: ScaleEntry 0.3s; /* Fx 5+ */
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards; /*   Safari 4+ */
+  -moz-animation-fill-mode: forwards; /*  Fx 5+ */
+}
+
+.commandbar-shortcut-tooltip {
+  opacity: 0;
+  animation: tagEntry 0.2s;
+  animation-delay: 0.5s;
+  -webkit-animation: tagEntry 0.2s;
+  -webkit-animation-delay: 0.5s;
+  -moz-animation: tagEntry 0.2s;
+  -moz-animation-delay: 0.5s;
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards;
+  -moz-animation-fill-mode: forwards;
+}
+
+@keyframes tagExit {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+.commandbar-shortcut-tooltip-remove {
+  animation: tagExit 0.2s; /* IE 10+, Fx 29+ */
+  -webkit-animation: tagExit 0.2s; /* Safari 4+ */
+  -moz-animation: tagExit 0.2s; /* Fx 5+ */
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards; /*   Safari 4+ */
+  -moz-animation-fill-mode: forwards; /*  Fx 5+ */
+}
+
+.commandbar-shortcut-tooltip,
+.commandbar-shortcut-tooltip-remove {
+  z-index: 99999999;
+  position: absolute;
+  padding: 8px 12px;
+  background-color: rgba(0, 0, 0, 0.8);
+  font-family: proxima-nova, sans-serif;
+  color: rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+  font-size: 13px;
+}
+
+.commandbar-shortcut-tooltip-tag {
+  margin-left: 10px;
+  padding: 2px 5px;
+  border-radius: 2px;
+  background-color: grey;
+}
+
+#commandbar-launcher {
+  animation: 0.25s ease-out scaleIn;
+}
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes growFromBottom {
+  0% {
+    transform: scale(1, 0.3);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.commandbar-animation-fade-in {
+  animation: 0.3s ease-out onEntry;
+  transform-origin: 100% 100%;
+}
+@keyframes moveLeft {
+  0% {
+    left: 0;
+  }
+  100% {
+    left: -110;
+  }
+}
+
+@keyframes commandbar-animation-shake {
+  10%, 90% {
+    transform: translate3d(-0.5px, 0, 0);
+  }
+  
+  20%, 80% {
+    transform: translate3d(1px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-2px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(2px, 0, 0);
+  }
+}
+
+.commandbar-breadcrumbs-container {
+  animation: moveLeft 0.4s; /* IE 10+, Fx 29+ */
+  -webkit-animation: moveLeft 0.4s; /* Safari 4+ */
+  -moz-animation: moveLeft 0.4s; /* Fx 5+ */
+  animation-fill-mode: forwards;
+  -webkit-animation-fill-mode: forwards; /*   Safari 4+ */
+  -moz-animation-fill-mode: forwards; /*  Fx 5+ */
+}
+</style><style>.rc-dialog {
+  position: relative;
+  width: auto;
+  margin: 10px;
+}
+.rc-dialog-wrap {
+  position: fixed;
+  overflow: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  -webkit-overflow-scrolling: touch;
+  outline: 0;
+}
+.rc-dialog-title {
+  margin: 0;
+  font-size: 14px;
+  line-height: 21px;
+  font-weight: bold;
+}
+.rc-dialog-content {
+  position: relative;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 6px 6px;
+  background-clip: padding-box;
+}
+.rc-dialog-close {
+  cursor: pointer;
+  border: 0;
+  background: transparent;
+  font-size: 21px;
+  position: absolute;
+  right: 20px;
+  top: 12px;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  filter: alpha(opacity=20);
+  opacity: .2;
+  text-decoration: none;
+}
+.rc-dialog-close-x:after {
+  content: '×';
+}
+.rc-dialog-close:hover {
+  opacity: 1;
+  filter: alpha(opacity=100);
+  text-decoration: none;
+}
+.rc-dialog-header {
+  padding: 13px 20px 14px 20px;
+  border-radius: 5px 5px 0 0;
+  background: #fff;
+  color: #666;
+  border-bottom: 1px solid #e9e9e9;
+}
+.rc-dialog-body {
+  padding: 20px;
+}
+.rc-dialog-footer {
+  border-top: 1px solid #e9e9e9;
+  padding: 10px 20px;
+  text-align: right;
+  border-radius: 0 0 5px 5px;
+}
+.rc-dialog-zoom-enter,
+.rc-dialog-zoom-appear {
+  opacity: 0;
+  -webkit-animation-duration: 0.3s;
+          animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0.08, 0.82, 0.17, 1);
+          animation-timing-function: cubic-bezier(0.08, 0.82, 0.17, 1);
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused;
+}
+.rc-dialog-zoom-leave {
+  -webkit-animation-duration: 0.3s;
+          animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0.6, 0.04, 0.98, 0.34);
+          animation-timing-function: cubic-bezier(0.6, 0.04, 0.98, 0.34);
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused;
+}
+.rc-dialog-zoom-enter.rc-dialog-zoom-enter-active,
+.rc-dialog-zoom-appear.rc-dialog-zoom-appear-active {
+  -webkit-animation-name: rcDialogZoomIn;
+          animation-name: rcDialogZoomIn;
+  -webkit-animation-play-state: running;
+          animation-play-state: running;
+}
+.rc-dialog-zoom-leave.rc-dialog-zoom-leave-active {
+  -webkit-animation-name: rcDialogZoomOut;
+          animation-name: rcDialogZoomOut;
+  -webkit-animation-play-state: running;
+          animation-play-state: running;
+}
+@-webkit-keyframes rcDialogZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}
+@keyframes rcDialogZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1, 1);
+  }
+}
+@-webkit-keyframes rcDialogZoomOut {
+  0% {
+    transform: scale(1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0, 0);
+  }
+}
+@keyframes rcDialogZoomOut {
+  0% {
+    transform: scale(1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0, 0);
+  }
+}
+@media (min-width: 768px) {
+  .rc-dialog {
+    width: 600px;
+    margin: 30px auto;
+  }
+}
+.rc-dialog-mask {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #373737;
+  background-color: rgba(55, 55, 55, 0.6);
+  height: 100%;
+  filter: alpha(opacity=50);
+  z-index: 1050;
+}
+.rc-dialog-mask-hidden {
+  display: none;
+}
+.rc-dialog-fade-enter,
+.rc-dialog-fade-appear {
+  opacity: 0;
+  -webkit-animation-duration: 0.3s;
+          animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+          animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused;
+}
+.rc-dialog-fade-leave {
+  -webkit-animation-duration: 0.3s;
+          animation-duration: 0.3s;
+  -webkit-animation-fill-mode: both;
+          animation-fill-mode: both;
+  -webkit-animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+          animation-timing-function: cubic-bezier(0.55, 0, 0.55, 0.2);
+  -webkit-animation-play-state: paused;
+          animation-play-state: paused;
+}
+.rc-dialog-fade-enter.rc-dialog-fade-enter-active,
+.rc-dialog-fade-appear.rc-dialog-fade-appear-active {
+  -webkit-animation-name: rcDialogFadeIn;
+          animation-name: rcDialogFadeIn;
+  -webkit-animation-play-state: running;
+          animation-play-state: running;
+}
+.rc-dialog-fade-leave.rc-dialog-fade-leave-active {
+  -webkit-animation-name: rcDialogFadeOut;
+          animation-name: rcDialogFadeOut;
+  -webkit-animation-play-state: running;
+          animation-play-state: running;
+}
+@-webkit-keyframes rcDialogFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes rcDialogFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@-webkit-keyframes rcDialogFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes rcDialogFadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+</style><style>.commandbar-search-filter-breadcrumb,
+.commandbar-breadcrumb,
+.commandbar-breadcrumb-background-left,
+.commandbar-breadcrumb-background-top {
+  line-height: 19.2px;
+  min-width: 0px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  position: relative;
+  transition: color ease-in 0.3s;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.commandbar-search-filter-breadcrumb {
+  padding: 4px;
+}
+
+.commandbar-breadcrumb-background-left {
+  margin: 0px 4px 8px 4px;
+}
+
+.commandbar-breadcrumb-background-top {
+  margin: 4px;
+}
+
+.commandbar-breadcrumbs-container-left {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  left: -110px;
+  max-width: 100px;
+  z-index: -1;
+  overflow: visible;
+  align-items: flex-end;
+  top: 0px;
+}
+
+.commandbar-breadcrumbs-container-top {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  max-width: 100%;
+}
+</style><style>/*
+* rc-tooltip styles
+* TODO set up a less loader and use the built in rc-tooltip.less files instead
+* of manually overwriting the css file with specific selectors
+*/
+
+.commandbar-tooltip.commandbar-tooltip-zoom-enter,
+.commandbar-tooltip.commandbar-tooltip-zoom-leave {
+  display: block;
+}
+.commandbar-tooltip-zoom-enter,
+.commandbar-tooltip-zoom-appear {
+  opacity: 0;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  animation-play-state: paused;
+}
+.commandbar-tooltip-zoom-leave {
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.6, -0.3, 0.74, 0.05);
+  animation-play-state: paused;
+}
+.commandbar-tooltip-zoom-enter.commandbar-tooltip-zoom-enter-active,
+.commandbar-tooltip-zoom-appear.commandbar-tooltip-zoom-appear-active {
+  animation-name: rcToolTipZoomIn;
+  animation-play-state: running;
+}
+.commandbar-tooltip-zoom-leave.commandbar-tooltip-zoom-leave-active {
+  animation-name: rcToolTipZoomOut;
+  animation-play-state: running;
+}
+@keyframes rcToolTipZoomIn {
+  0% {
+    opacity: 0;
+    transform-origin: 50% 50%;
+    transform: scale(0, 0);
+  }
+  100% {
+    opacity: 1;
+    transform-origin: 50% 50%;
+    transform: scale(1, 1);
+  }
+}
+@keyframes rcToolTipZoomOut {
+  0% {
+    opacity: 1;
+    transform-origin: 50% 50%;
+    transform: scale(1, 1);
+  }
+  100% {
+    opacity: 0;
+    transform-origin: 50% 50%;
+    transform: scale(0, 0);
+  }
+}
+.commandbar-tooltip {
+  position: absolute;
+  z-index: 1070;
+  display: block;
+  visibility: visible;
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.9;
+}
+.commandbar-tooltip-hidden {
+  display: none;
+}
+.commandbar-tooltip-placement-top,
+.commandbar-tooltip-placement-topLeft,
+.commandbar-tooltip-placement-topRight {
+  padding: 5px 0 9px 0;
+}
+.commandbar-tooltip-placement-right,
+.commandbar-tooltip-placement-rightTop,
+.commandbar-tooltip-placement-rightBottom {
+  padding: 0 5px 0 9px;
+}
+.commandbar-tooltip-placement-bottom,
+.commandbar-tooltip-placement-bottomLeft,
+.commandbar-tooltip-placement-bottomRight {
+  padding: 9px 0 5px 0;
+}
+.commandbar-tooltip-placement-left,
+.commandbar-tooltip-placement-leftTop,
+.commandbar-tooltip-placement-leftBottom {
+  padding: 0 9px 0 5px;
+}
+.commandbar-tooltip-inner {
+  padding: 8px 10px;
+  color: #d5d6d7 !important;
+  text-align: left;
+  text-decoration: none;
+  background-color: #373737;
+  border-radius: 6px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.17);
+}
+
+.commandbar-tooltip-inner > span {
+  color: inherit;
+}
+
+.commandbar-tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.commandbar-tooltip-placement-top .commandbar-tooltip-arrow,
+.commandbar-tooltip-placement-topLeft .commandbar-tooltip-arrow,
+.commandbar-tooltip-placement-topRight .commandbar-tooltip-arrow {
+  bottom: 4px;
+  margin-left: -5px;
+  border-width: 5px 5px 0;
+  border-top-color: #373737;
+}
+.commandbar-tooltip-placement-top .commandbar-tooltip-arrow {
+  left: 50%;
+}
+.commandbar-tooltip-placement-topLeft .commandbar-tooltip-arrow {
+  left: 15%;
+}
+.commandbar-tooltip-placement-topRight .commandbar-tooltip-arrow {
+  right: 15%;
+}
+.commandbar-tooltip-placement-right .commandbar-tooltip-arrow,
+.commandbar-tooltip-placement-rightTop .commandbar-tooltip-arrow,
+.commandbar-tooltip-placement-rightBottom .commandbar-tooltip-arrow {
+  left: 4px;
+  margin-top: -5px;
+  border-width: 5px 5px 5px 0;
+  border-right-color: #373737;
+}
+.commandbar-tooltip-placement-right .commandbar-tooltip-arrow {
+  top: 50%;
+}
+.commandbar-tooltip-placement-rightTop .commandbar-tooltip-arrow {
+  top: 15%;
+  margin-top: 0;
+}
+.commandbar-tooltip-placement-rightBottom .commandbar-tooltip-arrow {
+  bottom: 15%;
+}
+.commandbar-tooltip-placement-left .commandbar-tooltip-arrow,
+.commandbar-tooltip-placement-leftTop .commandbar-tooltip-arrow,
+.commandbar-tooltip-placement-leftBottom .commandbar-tooltip-arrow {
+  right: 4px;
+  margin-top: -5px;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #373737;
+}
+.commandbar-tooltip-placement-left .commandbar-tooltip-arrow {
+  top: 50%;
+}
+.commandbar-tooltip-placement-leftTop .commandbar-tooltip-arrow {
+  top: 15%;
+  margin-top: 0;
+}
+.commandbar-tooltip-placement-leftBottom .commandbar-tooltip-arrow {
+  bottom: 15%;
+}
+.commandbar-tooltip-placement-bottom .commandbar-tooltip-arrow,
+.commandbar-tooltip-placement-bottomLeft .commandbar-tooltip-arrow,
+.commandbar-tooltip-placement-bottomRight .commandbar-tooltip-arrow {
+  top: 4px;
+  margin-left: -5px;
+  border-width: 0 5px 5px;
+  border-bottom-color: #373737;
+}
+.commandbar-tooltip-placement-bottom .commandbar-tooltip-arrow {
+  left: 50%;
+}
+.commandbar-tooltip-placement-bottomLeft .commandbar-tooltip-arrow {
+  left: 15%;
+}
+.commandbar-tooltip-placement-bottomRight .commandbar-tooltip-arrow {
+  right: 15%;
+}
+</style><style>.styles_poweredContainer__YRbFW {
+  display: flex;
+  align-items: center;
+  opacity: 0.5;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.styles_poweredContainer__YRbFW:hover {
+  opacity: 1;
+}
+</style></head>
+
+  <body class="tw-dark"><script src="./Site overview _ flexstartrook_files/s.js.download"></script>
+    <svg style=" bottom: 0; position: absolute; z-index: -1;" aria-hidden="true">
+      <defs>
+        <radialgradient id="netlify-logo-gradient" cx="0%" cy="0%" r="100%" fx="0%" fy="0%">
+          <stop offset="0%" stop-color="#20C6B7"></stop>
+          <stop offset="100%" stop-color="#4D9ABF"></stop>
+        </radialgradient>
+        <path id="netlify-logomark" d="m297 88-8 50c3 1 5 2 7 5l39-17-38-38zm-34 69c-.5-2-.5-2.9 0-5l-58-25c-4 7-14 11-22 9l-49 76 129-55zm-59-54c2 2 4 7 4 11l62 27c2-2 3-3 6-4l10-60-40-40-42 66zm-98-18-47 47 51 74c4-1 8-2 13 0l48-76c-5-5-7-13-5-20l-60-25zm160 190-12 80 75.9-75.9L276 268c-2 4-6 6-10 7zm36-121 98 41.9a9 9 0 0 0-.6-2.2c-1.5-4.9-6-9.3-14.4-17.7l-40-41-43 19zm-59 107-105.1-21c-.9 2-.9 2-1.9 3l94 136 8-8 16-96c-6-3-10-8-11-14zM74 282l23-36c-1-1-1-1-2-3l-43 18 22 21zm223-116c-3 5-8 7-13 7l-12 71c4 3 6 6 7 12l62 12 44-44a76.7 76.7 0 0 0 13-15l-101-43zM91 230 4.8 212.9c2.3 2.9 5.6 6.5 10.2 11.1l27 27 49-21zm35 21c-5 3-13 3-18 1l-25 40 94 93c8.4 8.4 12.1 12.5 17 14 4.1 1.3 8.4 1.3 12.5 0s7.3-3.9 13.5-10l-94-138zm142.5-82.5L140 223c1 2 1 3 1 5l104 21c3-6 9-9 15-9l11-70c-1 0-2-1-2.5-1.5zM94 218c2-4 1-3 5-6l-49-71-34.9 35.2C6.7 184.6 2.5 188.8.9 193.7c-.5 1.7-.8 3.5-.9 5.3l94 19zm79-118c5-5 14-6 21-4l43-68-13-12.9C215.6 6.7 211.4 2.5 206.5 1a20.8 20.8 0 0 0-12.6 0c-4.9 1.5-9.5 6.6-17.9 15l-60 59 57 25z"></path>
+        <symbol id="netlify-logo" viewBox="0 0 400 400">
+          <use xlink:href="#netlify-logomark" fill="url(#netlify-logo-gradient)"></use>
+        </symbol>
+        <symbol id="netlify-logo-mono" viewBox="0 0 400 400">
+          <use xlink:href="#netlify-logomark" fill="inherit"></use>
+        </symbol>
+      </defs>
+    </svg>
+    <div id="root" tabindex="-1"><div role="status" aria-live="polite" aria-atomic="true" class="visuallyhidden"></div><div class="app"><header class="app-header inverse" role="banner"><a href="https://app.netlify.com/sites/flexstartrook/overview#main" class="skip-to-main">Skip to main content</a><div class="container"><div class="tw-flex tw-justify-between"><ol class="tw-flex tw-flex-wrap tw-items-start tw-list-none tw-mx-[-12px] tw-my-0 tw-p-0 tw-flex-col tw-text-xl tw-text-white md:tw-flex-row md:tw-items-center" aria-label="Breadcrumb"><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest tw-text-xl tw-text-black tw-underline dark:tw-text-white tw-text-underline-offset-4 active tw-flex tw-items-center tw-p-0 tw-ml-1 hover:!tw-bg-transparent tw-text-black tw-underline dark:tw-text-white tw-text-underline-offset-4 active" href="https://app.netlify.com/"><div class="tw-w-4 tw-h-4"><svg width="40" height="40"><title>Netlify</title><use xlink:href="#netlify-logo"></use></svg></div></a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest tw-text-xl !tw-pr-[4px] !tw-mr-[-10px] after:tw-ml-[-12px] after:tw-align-middle after:tw-bg-gray-dark after:tw-inline-block after:tw-mask-image-icon-caret-down after:tw-mask-center after:tw-mask-no-repeat after:tw-transform after:tw--rotate-90 after:tw-relative after:tw-w-[12px] after:tw-h-[12px] after:tw-content-empty dark:after:tw-bg-gray-light" href="https://app.netlify.com/teams/docsavage11"><span class="tw-mr-[20px]">Net Savage</span></a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest tw-text-xl tw-text-black tw-underline dark:tw-text-white tw-text-underline-offset-4 active tw-text-black tw-underline dark:tw-text-white tw-text-underline-offset-4 active" aria-current="location" href="https://app.netlify.com/sites/flexstartrook">flexstartrook</a></li></ol><div class="tw-flex tw-flex-wrap tw-justify-end tw-self-start lg:tw-self-center"><div class="tw-flex tw-flex-full tw-justify-end tw-items-end tw-mt-2 tw-order-2 lg:tw-flex-auto lg:tw-mr-1 lg:tw-mt-0 lg:tw-order-0"><a class="btn btn-default btn-primary btn-primary--pop tw-w-auto" href="https://app.netlify.com/teams/docsavage11/billing/pricing">Upgrade</a></div><button class="btn btn-icon btn-tertiary btn-tertiary--standard tw-ml-2 tw-mr-1 active:tw-bg-teal-lightest active:tw-text-teal-darkest dark:active:tw-text-white dark:hover:tw-text-white dark:tw-text-gray-light focus:tw-text-teal-darkest hover:tw-bg-teal-lightest hover:tw-text-teal-darkest tw-bg-transparent tw-text-gray-dark" type="button"><span class="tw-absolute tw-top-1/2 tw-left-1/2 tw-transform tw--translate-x-1/2 tw--translate-y-1/2"><svg width="24" height="24" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="!tw-fill-current tw-align-bottom" role="img"><title>Command Palette</title><path fill-rule="evenodd" clip-rule="evenodd" d="M10.48 11.9a6 6 0 111.41-1.41l2.82 2.8a1 1 0 01-1.42 1.42l-2.81-2.82zM11 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg></span></button><div class="md:tw-mx-1 md:tw-relative tw-mx-[4px] tw-static tw-w-button-icon" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="downshift-0-label"><button role="button" aria-label="Notifications. Open menu" aria-haspopup="true" data-toggle="true" class="btn btn-icon btn-tertiary btn-tertiary--standard hover:tw-text-teal-darkest hover:tw-bg-teal-lightest focus:tw-text-teal-darkest active:tw-text-teal-darkest active:tw-bg-teal-lightest dark:hover:tw-text-white dark:focus:tw-text-white dark:active:tw-text-white tw-text-gray-dark tw-bg-transparent dark:tw-text-gray-light" type="button"><span class="tw-absolute tw-top-1/2 tw-left-1/2 tw-transform tw--translate-x-1/2 tw--translate-y-1/2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="!tw-fill-current tw-align-bottom" role="img"><title>Notifications</title><g fill="none"><path fill="currentColor" d="M15 19a3 3 0 11-6 0h6zm3.13-2H5.87C4.838 17 4 16.105 4 15c0-.348.085-.69.246-.992L6.388 10V8C6.388 4.686 8.9 2 12 2s5.611 2.686 5.611 6v2l2.142 4.008c.513.959.201 2.18-.696 2.728a1.778 1.778 0 01-.928.264z"></path></g></svg></span></button></div><div class="md:tw-mx-1 md:tw-relative tw-mx-[4px] tw-static tw-w-button-icon" role="combobox" aria-expanded="false" aria-haspopup="listbox" aria-labelledby="downshift-1-label"><button role="button" aria-label="Support. Open menu" aria-haspopup="true" data-toggle="true" class="btn btn-icon btn-tertiary btn-tertiary--standard hover:tw-text-teal-darkest hover:tw-bg-teal-lightest focus:tw-text-teal-darkest active:tw-text-teal-darkest active:tw-bg-teal-lightest dark:hover:tw-text-white dark:active:tw-text-white tw-text-gray-dark tw-bg-transparent dark:tw-text-gray-light" type="button"><span class="tw-absolute tw-top-1/2 tw-left-1/2 tw-transform tw--translate-x-1/2 tw--translate-y-1/2"><svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="!tw-fill-current tw-absolute tw-hidden tw-align-bottom" role="img" width="24" height="24"><title>Support</title><path clip-rule="evenodd" d="M15 8A7 7 0 101 8a7 7 0 0014 0zM4 8a4 4 0 118 0 4 4 0 01-8 0z" fill="#fa3946" fill-rule="evenodd"></path><path d="M13.77 11.97L11.58 9.8c-.23.45-.54.86-.92 1.2l2.12 2.12c.37-.34.7-.72.99-1.14zM3.22 13.11L5.34 11c-.38-.34-.7-.75-.92-1.2l-2.18 2.18c.28.42.61.8.98 1.14zm2.41-8.33c-.4.3-.75.67-1.02 1.1L2.46 3.72c.3-.4.65-.76 1.04-1.08zm5.81 1.17c-.26-.43-.6-.81-1-1.12l2.13-2.13c.38.33.72.7 1.03 1.1z" fill="#e9eaeb"></path></svg><svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="!tw-fill-current tw-align-bottom" role="img" width="24" height="24"><title>Support</title><path clip-rule="evenodd" d="M15 8A7 7 0 101 8a7 7 0 0014 0zM4 8a4 4 0 118 0 4 4 0 01-8 0z" fill="#7d8589" fill-rule="evenodd"></path><path d="M13.77 11.97L11.58 9.8c-.23.45-.54.86-.92 1.2l2.12 2.12c.37-.34.7-.72.99-1.14zM3.22 13.11L5.34 11c-.38-.34-.7-.75-.92-1.2l-2.18 2.18c.28.42.61.8.98 1.14zm2.41-8.33c-.4.3-.75.67-1.02 1.1L2.46 3.72c.3-.4.65-.76 1.04-1.08zm5.81 1.17c-.26-.43-.6-.81-1-1.12l2.13-2.13c.38.33.72.7 1.03 1.1z" fill="#2d3b41"></path></svg></span></button></div><div class="dropdown tw-w-[36px] tw-h-[36px] tw-ml-[4px] md:tw-ml-1" aria-expanded="false" aria-haspopup="listbox"><button role="button" aria-label="User. Open menu" aria-haspopup="true" data-toggle="true" name="User" class="btn btn-default btn-tertiary btn-tertiary--standard tw-rounded-50 tw-w-[36px] tw-h-[36px] hover:tw-shadow-teal tw-relative" type="button"><img class="tw-rounded-50 tw-inline-block tw-font-regular tw-text-xl tw-text-center tw-text-white tw-self-center tw-object-cover tw-h-avatar-md tw-w-avatar-md tw-leading-normal tw-border-gray-lightest tw-border-solid tw-border tw-absolute tw-m-0 tw-top-0 tw-left-0 dark:tw-border-gray-dark" src="./Site overview _ flexstartrook_files/97268006" width="32" height="32" alt="" title=""></button><ul class="dropdown-inner dropdown-menu tw-top-4 tw-mt-[4px] tw-left-auto tw-right-0"><li><a id="downshift-2-item-0" role="option" aria-selected="false" class="menuitem"><div><small class="subdued">1docsavage1@gmail.com</small></div></a></li><li><a id="downshift-2-item-1" role="option" aria-selected="false" class="menuitem">User settings</a></li><li><a id="downshift-2-item-2" role="option" aria-selected="false" class="menuitem">Netlify Labs</a></li><li><a id="downshift-2-item-3" role="option" aria-selected="false" class="menuitem">Sign out</a></li></ul></div></div></div><nav aria-label="Secondary navigation" class="tw--mb-1"><ul class="tw-flex tw-flex-wrap tw-items-center tw-list-none tw-mx-[-12px] tw-my-0 tw-p-0"><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest tw-text-black tw-underline dark:tw-text-white tw-text-underline-offset-4 active" href="https://app.netlify.com/sites/flexstartrook/overview" aria-current="page">Site overview</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://app.netlify.com/sites/flexstartrook/deploys">Deploys</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://app.netlify.com/sites/flexstartrook/plugins">Plugins</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://app.netlify.com/sites/flexstartrook/functions">Functions</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://app.netlify.com/sites/flexstartrook/identity">Identity</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://app.netlify.com/sites/flexstartrook/forms">Forms</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://app.netlify.com/sites/flexstartrook/large-media">Large Media</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://app.netlify.com/sites/flexstartrook/splits">Split Testing</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://app.netlify.com/sites/flexstartrook/analytics">Analytics</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://app.netlify.com/sites/flexstartrook/graph">Graph</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://app.netlify.com/sites/flexstartrook/settings">Site settings</a></li></ul></nav></div></header><main id="main" class="app-main" role="main" tabindex="-1"><div class="container"><div class="layout-grid layout-grid-hero"><section class="card card-hero media site-hero"><div class="tw-flex"><div class="media-body"><h1 class="tw-flex tw-font-semibold tw-gap-1 tw-justify-start tw-leading-tight tw-text-xl after:tw-content-none tw-flex-wrap tw-gap-0">flexstartrook</h1><p><a class="status success" target="_blank" rel="noopener noreferrer" href="https://flexstartrook.netlify.app/">https://flexstartrook.netlify.app</a></p><p><span>Manual deploys</span>. <time datetime="2022-04-08T23:07:23.576Z" title="Fri, Apr 8, 2022 at 6:07 PM" aria-label="Last published on Apr 8">Last published on Apr&nbsp;8</time>. </p></div><a class="media-figure tw-screenshot" target="_blank" rel="noopener noreferrer" href="https://flexstartrook.netlify.app/" title="Go to site flexstartrook"><picture class="tw-border-none tw-m-0 tw-p-0 tw-block tw-w-full tw-align-middle tw-max-w-full tw-h-auto"><source srcset="https://screenshot-proxy.netlify.app/f_avif,w_336/https://d33wubrfki0l68.cloudfront.net/6250c02612d65325d39d97f4/screenshot_2022-04-08-23-07-23-0000.png" type="image/avif"><source srcset="https://screenshot-proxy.netlify.app/f_webp,w_336/https://d33wubrfki0l68.cloudfront.net/6250c02612d65325d39d97f4/screenshot_2022-04-08-23-07-23-0000.png" type="image/webp"><img src="./Site overview _ flexstartrook_files/screenshot_2022-04-08-23-07-23-0000.png" alt="" width="168" height="105" loading="lazy"></picture></a></div><footer class="tw-pt-3"><div><div class="tw-flex tw-flex-wrap tw-inline-spacer-gap-2"><a class="btn btn-default btn-secondary btn-secondary--standard" href="https://app.netlify.com/sites/flexstartrook/settings/general"><span class="tw-flex tw-justify-center tw-flex-nowrap tw-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" class="!tw-fill-current tw-flex-shrink-0 tw-mr-1" focusable="false"><path fill-rule="evenodd" d="M5.2 3.8A5 5 0 017 3.1V2a1 1 0 012 0v1.1a5 5 0 011.8.7l.7-.7A1 1 0 1113 4.5l-.7.7c.3.6.6 1.2.7 1.8h1a1 1 0 110 2h-1.1a5 5 0 01-.7 1.8l.7.7a1 1 0 11-1.4 1.4l-.7-.7a5 5 0 01-1.8.7V14a1 1 0 11-2 0v-1.1a5 5 0 01-1.8-.7l-.7.7A1 1 0 113 11.5l.7-.7A5 5 0 013.1 9H2a1 1 0 010-2h1.1a5 5 0 01.7-1.8L3 4.5A1 1 0 014.5 3l.7.7zM8 10a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>Site settings</span></a><a class="btn btn-default btn-secondary btn-secondary--standard" href="https://app.netlify.com/sites/flexstartrook/settings/domain"><span class="tw-flex tw-justify-center tw-flex-nowrap tw-items-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" class="!tw-fill-current tw-flex-shrink-0 tw-mr-1" focusable="false"><path fill-rule="evenodd" d="M5.2 3.8A5 5 0 017 3.1V2a1 1 0 012 0v1.1a5 5 0 011.8.7l.7-.7A1 1 0 1113 4.5l-.7.7c.3.6.6 1.2.7 1.8h1a1 1 0 110 2h-1.1a5 5 0 01-.7 1.8l.7.7a1 1 0 11-1.4 1.4l-.7-.7a5 5 0 01-1.8.7V14a1 1 0 11-2 0v-1.1a5 5 0 01-1.8-.7l-.7.7A1 1 0 113 11.5l.7-.7A5 5 0 013.1 9H2a1 1 0 010-2h1.1a5 5 0 01.7-1.8L3 4.5A1 1 0 014.5 3l.7.7zM8 10a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>Domain settings</span></a></div></div></footer></section></div><div class="card card-tutorial"><header class="card-header"><h2>Getting started</h2><button class="btn btn-icon btn-tertiary btn-tertiary--standard" type="button"><span class="tw-absolute tw-top-1/2 tw-left-1/2 tw-transform tw--translate-x-1/2 tw--translate-y-1/2"></span></button></header><ol><li class="media done"><div class="media-figure"></div><div class="media-body"><h3><span class="status-checked">Your site is deployed</span></h3><p>Try a test build and deploy, directly from your Git repository or a folder.</p></div></li><li class="media active"><div class="media-figure"></div><div class="media-body"><h3><a class="block-link action-link" href="https://app.netlify.com/sites/flexstartrook/settings/domain/setup">Set up a custom domain</a></h3><p>Buy a new domain or setup a domain you already own.</p></div></li><li class="media pending"><div class="media-figure"></div><div class="media-body"><h3>Secure your site with HTTPS</h3><p>Your site is secured automatically with a Let’s Encrypt certificate.</p></div></li></ol></div><div class="layout-grid"><div class="card table"><div class="table-header clickable"><h2><a class="block-link" title="Go to all Production deploys" href="https://app.netlify.com/sites/flexstartrook/deploys?filter"><svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" class="icon tw-w-3 tw-h-3"><path clip-rule="evenodd" d="M1.9 8.9h3.15a3.085 3.085 0 005.9 0h3.15a.9.9 0 100-1.8h-3.15a3.085 3.085 0 00-5.9 0H1.9a.9.9 0 000 1.8zM8 6.417a1.583 1.583 0 100 3.166 1.583 1.583 0 000-3.166z" fill-rule="evenodd"></path></svg>Production deploys</a></h2></div><div class="table-body"><ul><li class="clickable"><div class="inline"><div><p><span><strong>Production</strong></span> <a class="block-link" title="Go to deploy details" href="https://app.netlify.com/sites/flexstartrook/deploys/6250c02612d65325d39d97f4"><span class="tw-align-baseline tw-capitalize tw-duration-200 tw-ease-out tw-flex-0-auto tw-inline-block tw-leading-2 tw-px-[4px] tw-py-[2px] tw-relative tw-rounded-sm tw-self-center tw-text-sm tw-transition tw--top-px tw-whitespace-nowrap tw-font-bold tw-bg-teal-lightest tw-text-teal-darkest dark:tw-bg-teal-darkest dark:tw-text-teal-lighter">published</span></a></p><p class="meta truncate"><time datetime="2022-04-08T23:07:18.671Z" title="Fri, Apr 8, 2022 at 6:07 PM" aria-label="Apr 8">Apr&nbsp;8</time>: <span class="placeholder">No deploy message</span></p></div></div></li><li class="clickable"><div class="inline"><div><p><span><strong>Production</strong></span> <a class="block-link" title="Go to deploy details" href="https://app.netlify.com/sites/flexstartrook/deploys/624f075fcfca741e7935170e"><span class="tw-align-baseline tw-capitalize tw-duration-200 tw-ease-out tw-flex-0-auto tw-inline-block tw-leading-2 tw-px-[4px] tw-py-[2px] tw-relative tw-rounded-sm tw-self-center tw-text-sm tw-transition tw--top-px tw-whitespace-nowrap tw-font-bold tw-bg-teal-lightest tw-text-teal-darkest dark:tw-bg-teal-darkest dark:tw-text-teal-lighter !tw-sr-only">completed</span></a></p><p class="meta truncate"><time datetime="2022-04-07T15:46:39.557Z" title="Thu, Apr 7, 2022 at 10:46 AM" aria-label="Apr 7">Apr&nbsp;7</time>: <span class="placeholder">No deploy message</span></p></div></div></li><li class="clickable"><div class="inline"><div><p><span><strong>Production</strong></span> <a class="block-link" title="Go to deploy details" href="https://app.netlify.com/sites/flexstartrook/deploys/6240e55da8b5c6640d66d5d1"><span class="tw-align-baseline tw-capitalize tw-duration-200 tw-ease-out tw-flex-0-auto tw-inline-block tw-leading-2 tw-px-[4px] tw-py-[2px] tw-relative tw-rounded-sm tw-self-center tw-text-sm tw-transition tw--top-px tw-whitespace-nowrap tw-font-bold tw-bg-teal-lightest tw-text-teal-darkest dark:tw-bg-teal-darkest dark:tw-text-teal-lighter !tw-sr-only">completed</span></a></p><p class="meta truncate"><time datetime="2022-03-27T22:29:49.255Z" title="Sun, Mar 27, 2022 at 5:29 PM" aria-label="Mar 27">Mar&nbsp;27</time>: <span class="placeholder">No deploy message</span></p></div></div></li><li class="clickable"><div class="inline"><div><p><span><strong>Production</strong></span> <a class="block-link" title="Go to deploy details" href="https://app.netlify.com/sites/flexstartrook/deploys/62409d84e851e3702573f579"><span class="tw-align-baseline tw-capitalize tw-duration-200 tw-ease-out tw-flex-0-auto tw-inline-block tw-leading-2 tw-px-[4px] tw-py-[2px] tw-relative tw-rounded-sm tw-self-center tw-text-sm tw-transition tw--top-px tw-whitespace-nowrap tw-font-bold tw-bg-teal-lightest tw-text-teal-darkest dark:tw-bg-teal-darkest dark:tw-text-teal-lighter !tw-sr-only">completed</span></a></p><p class="meta truncate"><time datetime="2022-03-27T17:23:16.987Z" title="Sun, Mar 27, 2022 at 12:23 PM" aria-label="Mar 27">Mar&nbsp;27</time>: <span class="placeholder">No deploy message</span></p></div></div></li></ul></div></div><div class="card table"><div class="table-header disabled"><h2><a class="block-link" title="Go to all Deploy Previews" href="https://app.netlify.com/sites/flexstartrook/deploys?filter=deploy+previews" tabindex="-1"><svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" class="icon tw-w-3 tw-h-3"><g clip-rule="evenodd" fill-rule="evenodd"><path d="M6 3.5a2.5 2.5 0 01-1.6 2.333v4.334a2.5 2.5 0 11-1.8 0V5.833A2.5 2.5 0 116 3.5zm-2.5 1a1 1 0 100-2 1 1 0 000 2zm0 9a1 1 0 100-2 1 1 0 000 2zM6.964 3.246a.9.9 0 000 1.273L8.946 6.5a.9.9 0 001.273-1.273L9.79 4.8h1.474a.433.433 0 01.434.433v4.898a2.501 2.501 0 101.8.076V5.234A2.233 2.233 0 0011.265 3h-1.51l.464-.464a.9.9 0 10-1.273-1.272zM12.5 13.5a1 1 0 100-2 1 1 0 000 2z"></path></g></svg>Deploy Previews</a></h2></div><div class="table-body"><div class="tw-overflow-hidden tw-max-h-7 tw-h-8 tw-relative after:tw-content-empty after:tw-h-8 after:tw-inset-x-0 after:tw-absolute after:tw-pointer-events-none after:tw-bottom-0 after:tw-z-10 after:tw-bg-faded"><div class="tw-relative tw-overflow-hidden tw-max-w-list-loader tw-h-7 tw-rounded-sm tw-bg-gray-light dark:tw-bg-gray-darkest"><span class="tw-sr-only">Loading</span><svg xmlns="http://www.w3.org/2000/svg" width="872" height="168" class="tw-absolute tw-max-w-none tw-text-white dark:tw-text-black"><path fill-rule="evenodd" d="M0 0h872v168H0V0zm0 3.99A3.988 3.988 0 013.993 0h133.014A3.99 3.99 0 01141 3.99v16.02a3.988 3.988 0 01-3.993 3.99H3.993A3.99 3.99 0 010 20.01V3.99zm0 96A3.998 3.998 0 014 96h262c2.21 0 4 1.784 4 3.99v16.02a3.998 3.998 0 01-4 3.99H4c-2.21 0-4-1.784-4-3.99V99.99zm291 0a3.998 3.998 0 014.002-3.99h287.996A3.995 3.995 0 01587 99.99v16.02a3.998 3.998 0 01-4.002 3.99H295.002a3.995 3.995 0 01-4.002-3.99V99.99zm-291-48C0 49.786 1.79 48 3.992 48h179.016A3.99 3.99 0 01187 51.99v16.02c0 2.204-1.79 3.99-3.992 3.99H3.992A3.99 3.99 0 010 68.01V51.99zm0 96c0-2.204 1.79-3.99 3.992-3.99h179.016a3.99 3.99 0 013.992 3.99v16.02c0 2.204-1.79 3.99-3.992 3.99H3.992A3.99 3.99 0 010 164.01v-16.02zm291 0a3.995 3.995 0 013.998-3.99h314.004a3.993 3.993 0 013.998 3.99v16.02a3.995 3.995 0 01-3.998 3.99H294.998a3.993 3.993 0 01-3.998-3.99v-16.02zm0-144A3.998 3.998 0 01295.002 0h287.996A3.995 3.995 0 01587 3.99v16.02a3.998 3.998 0 01-4.002 3.99H295.002A3.995 3.995 0 01291 20.01V3.99zm0 48a3.997 3.997 0 013.998-3.99h254.004A3.992 3.992 0 01553 51.99v16.02a3.997 3.997 0 01-3.998 3.99H294.998A3.992 3.992 0 01291 68.01V51.99z"></path></svg></div></div></div><div class="tw-mt-5 md:tw-mt-5 tw-relative"><p class="tw-c-h2">Auto-preview your PR or branch</p><p>Every time you open a pull request, or push new changes to a branch, Netlify automatically builds a preview with a unique URL. Like a staging environment for every PR or branch, previews are perfect for testing and collaboration.</p><p><a class="tw-bg-none tw-border-none tw-text-teal-darkest tw-inline-block tw-font-bold tw-pr-3 tw-mt-1 tw-underline hover:tw-no-underline after:tw-content-arrow after:tw-ml-[4px] after:tw-absolute dark:tw-text-teal dark:focus:tw-outline-teal-lightest after:tw-transform after:tw--rotate-40" target="_blank" rel="noopener" href="https://www.netlify.com/products/deploy-previews/">Learn more about Deploy Previews</a></p></div></div><div class="card table"><div class="table-header disabled"><h2><a class="block-link" title="Go to all forms" tabindex="-1" href="https://app.netlify.com/sites/flexstartrook/forms"><svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="!tw-fill-current icon"><path d="M1.17 2C.523 2 0 2.545 0 3.222v8.556C0 12.455.522 13 1.17 13h13.66c.648 0 1.17-.545 1.17-1.222V3.222C16 2.545 15.478 2 14.83 2zm1.167 2.002a.36.36 0 01.3.115l4.846 4.996c.301.312.72.312 1.023 0l4.858-4.996a.354.354 0 01.52.023.463.463 0 01-.02.58l-2.748 2.828 2.742 2.72c.164.135.19.433.055.603a.356.356 0 01-.544.006l-2.794-2.77-1.569 1.61a1.38 1.38 0 01-2.024 0l-1.557-1.61-2.794 2.77a.356.356 0 01-.544-.006c-.136-.17-.109-.468.055-.603l2.742-2.72L2.136 4.72a.453.453 0 01-.11-.433.39.39 0 01.311-.285z"></path></svg>Recent form submissions</a></h2></div><div class="table-body"><div class="tw-overflow-hidden tw-max-h-7 tw-h-8 tw-relative after:tw-content-empty after:tw-h-8 after:tw-inset-x-0 after:tw-absolute after:tw-pointer-events-none after:tw-bottom-0 after:tw-z-10 after:tw-bg-faded 0"><div class="tw-relative tw-overflow-hidden tw-max-w-list-loader tw-h-7 tw-rounded-sm tw-bg-gray-light dark:tw-bg-gray-darkest"><span class="tw-sr-only">Loading</span><svg xmlns="http://www.w3.org/2000/svg" width="872" height="168" class="tw-absolute tw-max-w-none tw-text-white dark:tw-text-black"><path fill-rule="evenodd" d="M0 0h872v168H0V0zm0 3.99A3.988 3.988 0 013.993 0h133.014A3.99 3.99 0 01141 3.99v16.02a3.988 3.988 0 01-3.993 3.99H3.993A3.99 3.99 0 010 20.01V3.99zm0 96A3.998 3.998 0 014 96h262c2.21 0 4 1.784 4 3.99v16.02a3.998 3.998 0 01-4 3.99H4c-2.21 0-4-1.784-4-3.99V99.99zm291 0a3.998 3.998 0 014.002-3.99h287.996A3.995 3.995 0 01587 99.99v16.02a3.998 3.998 0 01-4.002 3.99H295.002a3.995 3.995 0 01-4.002-3.99V99.99zm-291-48C0 49.786 1.79 48 3.992 48h179.016A3.99 3.99 0 01187 51.99v16.02c0 2.204-1.79 3.99-3.992 3.99H3.992A3.99 3.99 0 010 68.01V51.99zm0 96c0-2.204 1.79-3.99 3.992-3.99h179.016a3.99 3.99 0 013.992 3.99v16.02c0 2.204-1.79 3.99-3.992 3.99H3.992A3.99 3.99 0 010 164.01v-16.02zm291 0a3.995 3.995 0 013.998-3.99h314.004a3.993 3.993 0 013.998 3.99v16.02a3.995 3.995 0 01-3.998 3.99H294.998a3.993 3.993 0 01-3.998-3.99v-16.02zm0-144A3.998 3.998 0 01295.002 0h287.996A3.995 3.995 0 01587 3.99v16.02a3.998 3.998 0 01-4.002 3.99H295.002A3.995 3.995 0 01291 20.01V3.99zm0 48a3.997 3.997 0 013.998-3.99h254.004A3.992 3.992 0 01553 51.99v16.02a3.997 3.997 0 01-3.998 3.99H294.998A3.992 3.992 0 01291 68.01V51.99z"></path></svg></div></div></div><div class="tw-mt-5 md:tw-mt-5 tw-relative"><p class="tw-c-h2">Collect form submissions</p><p>Netlify supports automatic collection of form submissions for any HTML form on your site, with no database required. Trigger an email, slack notification, or webhook with each form submission.</p><p><a class="tw-bg-none tw-border-none tw-text-teal-darkest tw-inline-block tw-font-bold tw-pr-3 tw-mt-1 tw-underline hover:tw-no-underline after:tw-content-arrow after:tw-ml-[4px] after:tw-absolute dark:tw-text-teal dark:focus:tw-outline-teal-lightest after:tw-transform after:tw--rotate-40" target="_blank" rel="noopener" href="https://www.netlify.com/docs/form-handling/">Read about form handling in our documentation</a></p></div></div><div class="card table"><div class="table-header disabled"><h2><a class="block-link" title="Go to Split Testing" href="https://app.netlify.com/sites/flexstartrook/splits" tabindex="-1"><svg height="16" viewBox="0 0 16 16" width="16" xmlns="http://www.w3.org/2000/svg" class="icon" aria-hidden="true"><path d="M8 7h3V5H9l3-4 3 4h-2v3a1 1 0 01-1 1H9v1.708a2.501 2.501 0 11-2 0V9H4a1 1 0 01-1-1V5H1l3-4 3 4H5v2zm0 7a1 1 0 100-2 1 1 0 000 2z"></path></svg>Active Split Test</a></h2></div><div class="table-body no-stripes"><div class="tw-overflow-hidden tw-max-h-7 tw-h-8 tw-relative after:tw-content-empty after:tw-h-8 after:tw-inset-x-0 after:tw-absolute after:tw-pointer-events-none after:tw-bottom-0 after:tw-z-10 after:tw-bg-faded"><div class="tw-relative tw-overflow-hidden tw-max-w-list-loader tw-h-7 tw-rounded-sm tw-bg-gray-light dark:tw-bg-gray-darkest"><span class="tw-sr-only">Loading</span><svg xmlns="http://www.w3.org/2000/svg" width="872" height="168" class="tw-absolute tw-max-w-none tw-text-white dark:tw-text-black"><path fill-rule="evenodd" d="M0 0h872v168H0V0zm0 3.99A3.988 3.988 0 013.993 0h133.014A3.99 3.99 0 01141 3.99v16.02a3.988 3.988 0 01-3.993 3.99H3.993A3.99 3.99 0 010 20.01V3.99zm0 96A3.998 3.998 0 014 96h262c2.21 0 4 1.784 4 3.99v16.02a3.998 3.998 0 01-4 3.99H4c-2.21 0-4-1.784-4-3.99V99.99zm291 0a3.998 3.998 0 014.002-3.99h287.996A3.995 3.995 0 01587 99.99v16.02a3.998 3.998 0 01-4.002 3.99H295.002a3.995 3.995 0 01-4.002-3.99V99.99zm-291-48C0 49.786 1.79 48 3.992 48h179.016A3.99 3.99 0 01187 51.99v16.02c0 2.204-1.79 3.99-3.992 3.99H3.992A3.99 3.99 0 010 68.01V51.99zm0 96c0-2.204 1.79-3.99 3.992-3.99h179.016a3.99 3.99 0 013.992 3.99v16.02c0 2.204-1.79 3.99-3.992 3.99H3.992A3.99 3.99 0 010 164.01v-16.02zm291 0a3.995 3.995 0 013.998-3.99h314.004a3.993 3.993 0 013.998 3.99v16.02a3.995 3.995 0 01-3.998 3.99H294.998a3.993 3.993 0 01-3.998-3.99v-16.02zm0-144A3.998 3.998 0 01295.002 0h287.996A3.995 3.995 0 01587 3.99v16.02a3.998 3.998 0 01-4.002 3.99H295.002A3.995 3.995 0 01291 20.01V3.99zm0 48a3.997 3.997 0 013.998-3.99h254.004A3.992 3.992 0 01553 51.99v16.02a3.997 3.997 0 01-3.998 3.99H294.998A3.992 3.992 0 01291 68.01V51.99z"></path></svg></div></div></div><div class="tw-mt-5 md:tw-mt-5 tw-relative"><p class="tw-c-h2">Split traffic to multiple branches</p><p>Split the traffic to your main domain between two or more branches, with no performance loss. Set up easy A/B tests with one click, leveraging edge node logic requests.</p><p><a class="tw-bg-none tw-border-none tw-text-teal-darkest tw-inline-block tw-font-bold tw-pr-3 tw-mt-1 tw-underline hover:tw-no-underline after:tw-content-arrow after:tw-ml-[4px] after:tw-absolute dark:tw-text-teal dark:focus:tw-outline-teal-lightest" href="https://app.netlify.com/sites/flexstartrook/splits">Start a Split Test</a></p></div></div></div></div></main><footer class="app-footer inverse" role="contentinfo"><div class="container"><nav><ul class="tw-flex tw-flex-wrap tw-items-center tw-list-none tw-mx-[-12px] tw-my-0 tw-p-0" aria-label="External links"><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://www.netlify.com/docs/">Docs</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://www.netlify.com/pricing/">Pricing</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://www.netlify.com/support">Support</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://www.netlify.com/news/">News</a></li><li class="tw-flex tw-items-center tw-m-[4px]"><a class="btn btn-default btn-tertiary btn-tertiary--standard tw-w-auto tw-font-semibold tw-p-1 tw-min-h-4 tw-leading-3 tw-text-left tw-text-gray-darker dark:tw-text-gray-light dark:hover:tw-text-teal dark:hover:tw-bg-teal-darkest" href="https://www.netlify.com/tos/">Terms</a></li></ul></nav><p><small>© 2022 Netlify</small></p></div></footer></div></div>
+    <script src="./Site overview _ flexstartrook_files/app.bundle.js.download"></script><iframe id="CrossStorageClient-60effbb8-3d12-4fa4-9500-87306af50d6d" style="display: none; position: absolute; top: -999px; left: -999px;" src="./Site overview _ flexstartrook_files/storage.html"></iframe>
+
+    <!--BEGIN QUALTRICS WEBSITE FEEDBACK SNIPPET-->
+    <script type="text/javascript">
+    (function(){var g=function(e,h,f,g){
+      this.get=function(a){for(var a=a+"=",c=document.cookie.split(";"),b=0,e=c.length;b<e;b++){for(var d=c[b];" "==d.charAt(0);)d=d.substring(1,d.length);if(0==d.indexOf(a))return d.substring(a.length,d.length)}return null};
+      this.set=function(a,c){var b="",b=new Date;b.setTime(b.getTime()+6048E5);b="; expires="+b.toGMTString();document.cookie=a+"="+c+b+"; path=/; "};
+      this.check=function(){var a=this.get(f);if(a)a=a.split(":");else if(100!=e)"v"==h&&(e=Math.random()>=e/100?0:100),a=[h,e,0],this.set(f,a.join(":"));else return!0;var c=a[1];if(100==c)return!0;switch(a[0]){case "v":return!1;case "r":return c=a[2]%Math.floor(100/c),a[2]++,this.set(f,a.join(":")),!c}return!0};
+      this.go=function(){if(this.check()){var a=document.createElement("script");a.type="text/javascript";a.src=g;document.body&&document.body.appendChild(a)}};
+      this.start=function(){var t=this;"complete"!==document.readyState?window.addEventListener?window.addEventListener("load",function(){t.go()},!1):window.attachEvent&&window.attachEvent("onload",function(){t.go()}):t.go()};};
+      try{(new g(100,"r","QSI_S_ZN_2fUBCKrIaC7UPsi","https://zn2fubckriac7upsi-netlify.siteintercept.qualtrics.com/SIE/?Q_ZID=ZN_2fUBCKrIaC7UPsi")).start()}catch(i){}
+    })();
+    </script><div id="ZN_2fUBCKrIaC7UPsi"><!--DO NOT REMOVE-CONTENTS PLACED HERE--></div>
+    <!--END WEBSITE FEEDBACK SNIPPET-->
+
+    <noscript>
+      <div class="app">
+        <div
+          class="tw-flex tw-z-overlay tw-inset-0 tw-fixed tw-items-center tw-justify-center tw-m-0 tw-text-center tw-w-full tw-min-h-screen tw-bg-white"
+        >
+          <div class="container">
+            <h1>The Netlify dashboard needs JavaScript :(</h1>
+            <p>
+              You can enable JavaScript in
+              <a
+                href="https://enable-javascript.com/"
+                class="highlight-link"
+                target="new"
+                >your browser settings</a
+              >.
+            </p>
+          </div>
+        </div>
+      </div>
+    </noscript>
+  
+
+<script type="text/javascript" src="./Site overview _ flexstartrook_files/saved_resource"></script><div id="commandbar-wrapper" data-commandbar="1"><div id="commandbar" data-commandbar="1"><style data-emotion="commandbar"></style><div><div class="rc-dialog-root"><div tabindex="-1" class="rc-dialog-wrap commandbar-modal" role="dialog" aria-label="commandbar" style="z-index: 2147483644; display: none;"><div role="document" class="rc-dialog commandbar-dialog" style="font-family: -apple-system, &quot;system-ui&quot;, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif, &quot;Apple Color Emoji&quot;, &quot;Segoe UI Emoji&quot;, &quot;Segoe UI Symbol&quot;; background-color: transparent; top: 10%; width: 640px; left: 0px;"><div tabindex="0" aria-hidden="true" style="width: 0px; height: 0px; overflow: hidden; outline: none;"></div><div class="rc-dialog-content"><div class="commandbar-animation commandbar-opened" style="background-color: rgb(255, 255, 255); border-radius: 8px; padding: 0px; box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px; z-index: 1; margin: 0px 5px;"><div id="commandbar-home"><div style="width: 100%;"><div id="commandbar__control_wrapper" style="border: none; border-radius: 0px; background: none; z-index: 2147483645;"><div style="display: flex; flex-flow: column wrap;"><div></div><div id="commandbar__control" style="display: flex; align-items: center; padding: 24px 16px; cursor: text;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="height: 32px; width: 32px; left: 17px; top: 25px; margin-right: 12px;"><path d="M17.1534 8.48095L17.145 8.47735C17.1402 8.47555 17.1354 8.47375 17.1312 8.46955C17.1243 8.46216 17.1192 8.45328 17.1163 8.44361C17.1134 8.43393 17.1127 8.42372 17.1144 8.41375L17.5782 5.57815L19.7532 7.75375L17.4912 8.71615C17.4849 8.71869 17.4782 8.71991 17.4714 8.71975H17.4624C17.4594 8.71795 17.4564 8.71555 17.4504 8.70955C17.3662 8.61582 17.2656 8.53834 17.1534 8.48095V8.48095ZM20.3082 8.30815L22.6338 10.6338C23.1168 11.1174 23.3586 11.3586 23.4468 11.6382C23.46 11.6796 23.4708 11.721 23.4792 11.7636L17.9214 9.40975C17.9184 9.40852 17.9154 9.40732 17.9124 9.40615C17.8902 9.39715 17.8644 9.38695 17.8644 9.36415C17.8644 9.34135 17.8908 9.33055 17.913 9.32155L17.9202 9.31855L20.3082 8.30815V8.30815ZM23.3844 12.51C23.2644 12.7356 23.0304 12.9696 22.6344 13.3662L20.0124 15.9876L16.6212 15.2814L16.6032 15.2778C16.5732 15.273 16.5414 15.2676 16.5414 15.2406C16.5285 15.1007 16.487 14.9649 16.4194 14.8418C16.3518 14.7186 16.2595 14.6107 16.1484 14.5248C16.1346 14.511 16.1382 14.4894 16.1424 14.4696C16.1424 14.4666 16.1424 14.4636 16.1436 14.4612L16.7814 10.5456L16.7838 10.5324C16.7874 10.5024 16.7928 10.4676 16.8198 10.4676C16.9565 10.4505 17.0884 10.4065 17.2079 10.338C17.3274 10.2695 17.4321 10.1779 17.5158 10.0686C17.5212 10.0626 17.5248 10.056 17.532 10.0524C17.5512 10.0434 17.574 10.0524 17.5938 10.0608L23.3838 12.51H23.3844ZM19.4094 16.5906L15.0978 20.9022L15.8358 16.3662L15.837 16.3602C15.8376 16.3542 15.8388 16.3482 15.8406 16.3428C15.8466 16.3284 15.8622 16.3224 15.8772 16.3164L15.8844 16.3134C16.046 16.2444 16.1889 16.1381 16.3014 16.0032C16.3158 15.9864 16.3332 15.9702 16.3554 15.9672C16.3612 15.9662 16.367 15.9662 16.3728 15.9672L19.4088 16.5912L19.4094 16.5906ZM14.1852 21.8148L13.6992 22.3008L8.3262 14.5356C8.32426 14.5327 8.32225 14.5299 8.3202 14.5272C8.3118 14.5158 8.3028 14.5044 8.3046 14.4912C8.3052 14.4816 8.3112 14.4732 8.3178 14.466L8.3238 14.4582C8.34 14.4342 8.3538 14.4102 8.3688 14.3844L8.3808 14.3634L8.3826 14.3616C8.391 14.3472 8.3988 14.3334 8.4132 14.3256C8.4258 14.3196 8.4432 14.322 8.457 14.325L14.4096 15.5526C14.4262 15.5551 14.4419 15.562 14.4552 15.5724C14.463 15.5802 14.4648 15.5886 14.4666 15.5982C14.5081 15.7553 14.5854 15.9006 14.6924 16.0229C14.7994 16.1452 14.9332 16.2411 15.0834 16.3032C15.1002 16.3116 15.093 16.3302 15.0852 16.35C15.0813 16.3586 15.0783 16.3677 15.0762 16.377C15.0012 16.833 14.358 20.7558 14.1852 21.8148ZM13.17 22.8294C12.8118 23.184 12.6006 23.3717 12.3618 23.4473C12.1263 23.5218 11.8737 23.5218 11.6382 23.4473C11.3586 23.3585 11.1168 23.1174 10.6338 22.6338L5.238 17.238L6.6474 15.0522C6.654 15.0414 6.6606 15.0318 6.6714 15.024C6.6864 15.0132 6.708 15.018 6.726 15.024C7.0495 15.1216 7.39682 15.104 7.7088 14.9742C7.725 14.9682 7.7412 14.964 7.7538 14.9754C7.7601 14.9811 7.76573 14.9875 7.7706 14.9946L13.17 22.83V22.8294ZM4.7178 16.7178L3.48 15.48L5.9244 14.4372C5.93065 14.4344 5.93738 14.433 5.9442 14.433C5.9646 14.433 5.9766 14.4534 5.9874 14.472C6.01196 14.5097 6.03798 14.5466 6.0654 14.5824L6.0732 14.592C6.0804 14.6022 6.0756 14.6124 6.0684 14.622L4.7184 16.7178H4.7178ZM2.9322 14.9322L1.3662 13.3662C1.0998 13.0998 0.9066 12.9066 0.7722 12.7404L5.5338 13.728C5.53978 13.7291 5.54578 13.7301 5.5518 13.731C5.5812 13.7358 5.6136 13.7412 5.6136 13.7688C5.6136 13.7988 5.5782 13.8126 5.5482 13.824L5.5344 13.83L2.9322 14.9322ZM0.4986 11.9352C0.504026 11.8343 0.52217 11.7345 0.5526 11.6382C0.6414 11.3586 0.8826 11.1174 1.3662 10.6338L3.3702 8.62975C4.2929 9.96888 5.2181 11.3063 6.1458 12.642C6.162 12.6636 6.18 12.6876 6.1614 12.7056C6.0738 12.8022 5.9862 12.9078 5.9244 13.0224C5.91769 13.0371 5.90738 13.0499 5.8944 13.0596C5.8866 13.0644 5.8782 13.0626 5.8692 13.0608H5.868L0.4986 11.9346V11.9352ZM3.9066 8.09335L6.6012 5.39875C6.8544 5.50975 7.776 5.89915 8.6004 6.24715C9.2244 6.51115 9.7932 6.75115 9.972 6.82915C9.99 6.83635 10.0062 6.84355 10.014 6.86155C10.0188 6.87235 10.0164 6.88615 10.014 6.89755C9.97134 7.09206 9.97769 7.29411 10.0325 7.48556C10.0872 7.67701 10.1887 7.85184 10.3278 7.99435C10.3458 8.01235 10.3278 8.03815 10.3122 8.06035L10.3038 8.07295L7.5678 12.3108C7.5606 12.3228 7.554 12.333 7.542 12.3408C7.5276 12.3498 7.5072 12.3456 7.4904 12.3414C7.38399 12.3135 7.27459 12.2986 7.1646 12.297C7.0662 12.297 6.9594 12.315 6.8514 12.3348H6.8508C6.8388 12.3366 6.828 12.339 6.8184 12.3318C6.8078 12.3231 6.79868 12.3128 6.7914 12.3012L3.9066 8.09335V8.09335ZM7.1454 4.85455L10.6338 1.36615C11.1168 0.883155 11.3586 0.641355 11.6382 0.553155C11.8737 0.478701 12.1263 0.478701 12.3618 0.553155C12.6414 0.641355 12.8832 0.883155 13.3662 1.36615L14.1222 2.12215L11.6412 5.96455C11.6351 5.97574 11.6267 5.98554 11.6166 5.99335C11.6016 6.00355 11.5806 5.99935 11.5626 5.99335C11.367 5.93399 11.1599 5.92318 10.9591 5.96187C10.7584 6.00055 10.5701 6.08755 10.4106 6.21535C10.3944 6.23215 10.3704 6.22255 10.35 6.21355C10.026 6.07255 7.506 5.00755 7.1454 4.85455V4.85455ZM14.649 2.64895L16.9398 4.93975L16.3878 8.35855V8.36755C16.3873 8.37535 16.3857 8.38302 16.383 8.39035C16.377 8.40235 16.365 8.40475 16.353 8.40835C16.235 8.4441 16.1238 8.49948 16.0242 8.57215C16.0199 8.57521 16.0159 8.57862 16.0122 8.58235C16.0056 8.58955 15.999 8.59615 15.9882 8.59735C15.9794 8.59763 15.9706 8.5962 15.9624 8.59315L12.4716 7.10995L12.465 7.10695C12.4428 7.09795 12.4164 7.08715 12.4164 7.06435C12.3959 6.86982 12.3323 6.6823 12.2304 6.51535C12.2136 6.48775 12.195 6.45895 12.2094 6.43075L14.649 2.64895V2.64895ZM12.2898 7.81255L15.5622 9.19855C15.5802 9.20695 15.6 9.21475 15.6078 9.23335C15.6109 9.24454 15.6109 9.25637 15.6078 9.26755C15.5982 9.31555 15.5898 9.37015 15.5898 9.42535V9.51715C15.5898 9.53995 15.5664 9.54955 15.5448 9.55855L15.5382 9.56095C15.0198 9.78235 8.2602 12.6648 8.25 12.6648C8.2398 12.6648 8.229 12.6648 8.2188 12.6546C8.2008 12.6366 8.2188 12.6114 8.235 12.5886C8.23786 12.5846 8.24066 12.5806 8.2434 12.5766L10.9326 8.41255L10.9374 8.40535C10.953 8.38015 10.971 8.35195 10.9998 8.35195L11.0268 8.35615C11.088 8.36455 11.142 8.37235 11.1966 8.37235C11.6046 8.37235 11.9826 8.17375 12.2106 7.83415C12.216 7.82509 12.2229 7.81698 12.231 7.81015C12.2472 7.79815 12.2712 7.80415 12.2898 7.81255V7.81255ZM8.5422 13.3236L15.9102 10.1814C15.9102 10.1814 15.921 10.1814 15.9312 10.1916C15.9714 10.2318 16.0056 10.2588 16.0386 10.284L16.0548 10.2942C16.0698 10.3026 16.0848 10.3122 16.086 10.3278C16.086 10.3338 16.086 10.3374 16.0848 10.3428L15.4536 14.22L15.4512 14.2356C15.447 14.2656 15.4428 14.2998 15.4146 14.2998C15.2463 14.3111 15.0833 14.3633 14.9398 14.4519C14.7962 14.5404 14.6765 14.6627 14.5908 14.808L14.5878 14.8128C14.5794 14.8266 14.5716 14.8398 14.5578 14.847C14.5452 14.853 14.529 14.8506 14.5158 14.8476L8.64 13.6356C8.634 13.6344 8.5488 13.3242 8.5422 13.3236V13.3236Z" fill="url(#paint0_radial_7:2)"></path><defs><radialgradient id="paint0_radial_7:2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(-0.272957 11.6757) rotate(90) scale(22.9806 26.5319)"><stop stop-color="#20C6B7"></stop><stop offset="1" stop-color="#4D9ABF"></stop></radialgradient></defs></svg><div class="commandbar__input" style="flex-grow: 1; display: flex; align-items: center;"><input id="commandbar-input-control" data-testid="commandbar-input" placeholder="Search for sites, settings, and actions..." role="combobox" aria-expanded="true" aria-controls="commandbar-empty-menu" aria-owns="commandbar-empty-menu" aria-activedescendant="commandbar-empty-menu" aria-label="Search for sites, settings, and actions..." aria-placeholder="Search for sites, settings, and actions..." class="commandbar-alz2od" value=""><div role="progressbar" aria-label="progress bar" style="position: absolute; right: 40px;"></div></div></div></div></div><div style="height: auto; overflow: hidden; border: none; border-radius: 0px; margin-top: 0px;"><div></div><div style="min-height: 0px;"><div><div></div></div></div><div style="position: relative;"><div style=""><footer class="custom-footer">
+    <a class="powered-by" href="https://commandbar.com/powered-by-commandbar?org=Netlify" target="_blank">
+      Powered by CommandBar
+    </a>
+    <a id="command-palette-shortcut">
+      <kbd class="tw-font-sans">Add shortcut</kbd>
+    </a>
+  </footer></div></div></div></div></div></div></div><div tabindex="0" aria-hidden="true" style="width: 0px; height: 0px; overflow: hidden; outline: none;"></div></div></div></div><div><div></div></div><div style="position: absolute; top: 35vh; right: 50vw; z-index: 2147483647;"><div style="position: relative;"></div></div></div></div></div><div id="a11y-status-message" role="status" aria-live="polite" aria-relevant="additions text" style="border: 0px; clip: rect(0px, 0px, 0px, 0px); height: 1px; margin: -1px; overflow: hidden; padding: 0px; position: absolute; width: 1px;"></div></body></html>
