@@ -1887,7 +1887,7 @@ body {
 
 
 
-/* MEADI QUERY 700px START */
+/* MEADI QUERY 700px START /
 
 @media (max-width: 700px) {
     .alphaContainer {
@@ -2149,7 +2149,7 @@ body {
     
     
     
-    /* BODY START */
+    /* BODY START /
     
     .websiteBox {
         background-color: #151a1e;
@@ -2797,7 +2797,7 @@ body {
     
     
     
-    /* FOOTER START */
+    /* FOOTER START /
     
     .footer {
         display: flex;
