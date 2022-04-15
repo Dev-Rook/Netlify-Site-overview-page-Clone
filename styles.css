@@ -336,7 +336,13 @@ body {
     margin: auto;
 }
 
-#settingType {
+#settingType1 {
+    margin: auto;
+    color: white;
+    font-size: 15px;
+}
+
+#settingType2 {
     margin: auto;
     color: white;
     font-size: 15px;
@@ -867,6 +873,8 @@ body {
     margin: auto;
     margin-left: 0px;
 
+    gap: 20px;
+
     height: 20px;
     width: 30%;
 }
@@ -901,11 +909,10 @@ body {
 
 
 
-/* MEADI QUERY */
+/* MEADI QUERY 414px START */
 
 @media (max-width: 414px) {
     .alphaContainer {
-
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -1868,3 +1875,915 @@ body {
         font-weight: 500;
     }
 }
+
+
+/* MEADI QUERY 414px END */
+
+
+
+
+
+
+
+
+
+/* MEADI QUERY 700px START */
+
+@media (max-width: 700px) {
+    /* HEADER START */
+.alphaContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+
+    margin: auto;
+
+    width: 1250px;
+    height: 100%;
+}
+
+.topBar {
+    display: flex;
+
+
+    margin: auto;
+    margin-top: 20px;
+
+    height: 50px;
+    width: 100%;
+}
+
+.leftBox {
+    display: flex;
+
+    margin: auto;
+    margin-left: 25px;
+
+    height: 50px;
+    width: 330px;
+}
+
+
+.logo {
+    margin: auto;
+
+    height: 40px;
+    width: 40px;
+}
+
+#NetlifyLogo {
+    height: 40px;
+    width: 40px;
+}
+
+.brand {
+    display: flex;
+
+    margin: auto;
+    margin-left: 12px;
+
+}
+
+#brand {
+    color: #808589;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+#brandArrow {
+    margin: auto;
+    margin-top: 4px;
+    height: 20px;
+}
+
+
+.websiteName {
+    margin: auto;
+    border-bottom: 1px solid white;   
+}
+
+#websiteName {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+.righBox {
+    display: flex;
+
+    margin: auto;
+    margin-right: 0px;
+
+    height: 50px;
+    width: 330px;
+}
+
+.upgradeButton a {
+    text-decoration: none;
+    color: black;
+}
+
+.upgradeButton {
+    border: 1px solid #a5befd;
+    border-radius: 5px;
+    background-color: #a5befd;
+
+    display: flex;
+    margin: auto;
+    padding: 3px;
+
+    height: 30px;
+    width: 80px;
+}
+
+#upgrade {
+    margin: auto;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.searchIcon {
+    display: flex;
+    margin: auto;
+}
+
+#searchIcon {
+    height: 23px;
+}
+
+.notificationIcon {
+    display: flex;
+    margin: auto;
+}
+
+#bellIcon {
+    height: 23px;
+}
+
+.supportIcon {
+    display: flex;
+    margin: auto;
+}
+
+#supportIcon {
+    height: 30px;
+}
+
+.profileLogo {
+    border: 1px solid white;
+    border-radius: 50%;
+
+    background-image: url(/Assests/Imagies/Caesar.jpg);
+    background-position: center;
+    background-size: cover;
+
+
+    display: flex;
+    margin: auto;
+
+    height: 30px;
+    width: 30px;
+}
+
+.navBar1 a {
+    text-decoration: none;
+    color: grey;
+}
+
+.navBar1 {
+    display: flex;
+
+    margin: auto;
+    margin-left: 0px;
+    margin-top: 20px;
+
+
+    height: 40px;
+    width: 100%;
+}
+  
+.navlink1 {
+    display: flex;
+    margin: auto;
+}
+
+#navlink1 {
+    font-weight: bolder;
+    font-size: 16px;
+}
+
+.firstRow, .secondRow, .thirdRow {
+
+    display: flex;
+
+    margin: auto;
+
+    height: 50%;
+    width: 100%;
+}
+
+/* HEADER END */
+
+
+
+/* BODY START */
+
+.websiteBox {
+    background-color: #151a1e;
+    border-radius: 10px;
+    display: flex;
+
+    margin: auto;
+    margin-top: 30px;
+    margin-left: 25px;
+
+    height: 215px;
+    width: 680px;
+}
+
+.leftside {
+    display: flex;
+    flex-direction: column;
+
+    margin: auto;
+    padding: 20px;
+
+    height: 100%;
+    width: 70%;
+}
+
+
+.title {
+    display: flex;
+
+    margin: auto;
+    margin-left: 0px;
+
+}
+
+#webtitle {
+    font-size: 23px;
+    font-weight: 600;
+    color: white;
+}
+
+.weblink a {
+    text-decoration: none;
+    color: #2cc4be;
+}
+.weblink {
+    display: flex;
+    margin: auto;
+    margin-left: 0px;
+}
+
+.bulletin {
+    background-color: #2cc4be;
+    border-radius: 50%;
+
+    display: flex;
+
+    margin: auto;
+    margin-right: 10px;
+
+    height: 10px;
+    width: 10px;
+}
+
+.manualDeploys {
+    display: flex;
+    margin: auto;
+    margin-left: 0px;
+}
+
+#manualDeploys {
+    color: #808589;
+    font-weight: 600;
+}
+
+.settings-deploys {
+    display: flex;
+    margin: auto;
+    margin-top: 30px;
+    margin-left: 0px;
+
+    width: 300px;
+}
+
+.settingBox {
+    border-radius: 5px;
+    background-color: #4c5257;
+
+    display: flex;
+
+    margin: auto;
+    margin-left: 0px;
+    padding: 5px;
+
+    height: 35px;
+    width: 140px;
+}
+
+.deploySettings {
+    border-radius: 5px;
+    background-color: #4c5257;
+
+    display: flex;
+
+    margin: auto;
+    margin-left: 0px;
+    padding: 5px;
+
+    height: 35px;
+    width: 150px;
+}
+
+.settingIcons {
+    border: 1px solid white;
+}
+
+#settingIcons {
+    height: 20px;
+    margin: auto;
+
+}
+
+.settingType {
+    border: 1px solid black;
+    margin: auto;
+}
+
+#settingType1 {
+    margin: auto;
+    color: white;
+    font-size: 15px;
+}
+
+#settingType2 {
+    margin: auto;
+    color: white;
+    font-size: 15px;
+}
+
+.rightside {
+    display: flex;
+    flex-direction: column;
+
+    margin: auto;
+
+    height: 100%;
+    width: 30%;
+}
+
+.websitepreview {
+    margin: auto;
+    margin-top: 20px;
+    margin-left: 5px;
+}
+
+
+
+
+.getStartedBox {
+    border-top: 10px solid #2cc4be;
+    background-color: #151a1e;
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+
+    margin: auto;
+    margin-top: 30px;
+
+
+    height: 320px;
+    width: 1200px;
+}
+
+.getStartedtitle {
+    border-bottom: 1px solid #2a2e32;
+
+    display: flex;
+
+    margin: auto;
+
+    height: 60px;
+    width: 1150px;
+}
+
+#getStartedtitle {
+    color: white;
+    font-size: 25px;
+    font-weight: 600;
+
+    margin: auto;
+    margin-left: 0%;
+}
+
+.contentContainer {
+    display: flex;
+
+    margin: auto;
+
+    height: 320px;
+    width: 1200px;
+}
+
+.progressionBox {
+    display: flex;
+    flex-direction: column;
+
+    margin: auto;
+
+    height: 100%;
+    width: 400px;
+}
+
+.number {
+    margin: auto;
+}
+
+#number {
+    font-size: 80px;
+    font-weight: 600;
+    color: white;
+}
+
+#number2 {
+    font-size: 80px;
+    font-weight: 600;
+    color: #2cc4be;
+}
+
+
+.currentStage {
+    display: flex;
+
+    margin: auto;
+    margin-top: 0px;
+}
+
+#currentStage {
+    margin: auto;
+
+    font-size: 20px;
+    font-weight: 600;
+    color: white;
+}
+
+#currentStage2 {
+    border-bottom: 1px solid #2cc4be;
+    margin: auto;
+
+    font-size: 20px;
+    font-weight: 600;
+    color: #2cc4be;
+}
+
+#longRightArrow {
+    margin: auto;
+    margin-left: 10px;
+
+    height: 20px;
+}
+
+#mark {
+    height: 20px;
+    margin: auto;
+    margin-left: 10px;
+}
+
+.emplore {
+    display: flex;
+
+    margin: auto;
+    margin-top: 0px;
+    margin-bottom: 40px;
+
+    text-align: center;
+
+    width: auto;
+}
+
+#emplore {
+    font-size: 16px;
+    font-weight: 600;
+    color: grey;
+}
+
+
+
+.preduction-and-deploy-preview {
+    display: flex;
+
+    margin: auto;
+    margin-top: 30px;
+
+    gap: 50px;
+
+    height: 100%;
+    width: 1200px;
+}
+
+.productionDeploys, .deployPreviews {
+    border-radius: 10px;
+
+    background-color: #151a1e;
+
+    display: flex;
+    flex-direction: column;
+
+    margin: auto;
+
+
+ 
+    height: 520px;
+    width: 50%;
+}
+
+
+
+.recentFormSubmissions-activeSplitTest{
+    display: flex;
+
+    margin: auto;
+    margin-top: 30px;
+
+    gap: 50px;
+
+    height: 100%;
+    width: 1200px;
+}
+
+
+.recentFormSubmissions, .activeSplitTest {
+    border-radius: 10px;
+
+    background-color: #151a1e;
+
+    display: flex;
+    flex-direction: column;
+
+    margin: auto;
+    padding: 20px;
+
+    height: 520px;
+    width: 50%;
+}
+
+#commitIcon {
+    height: 30px;
+    margin: auto;
+    margin-left: 0px;
+    margin-right: 20px;
+}
+
+#nodeIcon {
+    height: 30px;
+    margin: auto;
+    margin-left: 0px;
+    margin-right: 20px; 
+}
+
+#mailIcon {
+    height: 30px;
+    margin: auto;
+    margin-left: 0px;
+    margin-right: 20px; 
+}
+
+#splitIcon {
+    height: 30px;
+    margin: auto;
+    margin-left: 0px;
+    margin-right: 20px; 
+}
+
+.titleBox {
+    border-bottom: 1px solid #2a2e32;
+
+    display: flex;
+
+    margin: auto;
+    margin-top: 0px;
+
+    height: 60px;
+    width: 520px;
+}
+
+#titleBox {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+
+    margin: auto;
+    margin-left: 0px;
+}
+
+.productionContentContainer {
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 30%;
+
+    width: 100%;
+}
+
+.production1 {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    margin: auto;
+    padding: 20px;
+    justify-content: center;
+
+    height: 70px;
+    width: 100%;
+}
+
+.production2 {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    background-color: #1c2125;
+
+    margin: auto;
+    padding: 20px;
+    justify-content: center;
+
+    height: 70px;
+    width: 100%;
+}
+
+.production3 {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    margin: auto;
+    padding: 20px;
+    justify-content: center;
+
+    height: 70px;
+    width: 100%;
+}
+
+.production4 {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+
+    background-color: #1c2125;
+
+    margin: auto;
+    padding: 20px;
+    justify-content: center;
+
+    height: 70px;
+    width: 100%;
+}
+
+.productionTitle1 {
+    display: flex;
+
+    margin: auto;
+    margin-left: 0px;
+}
+
+#productionTitle {
+    color: white;
+    font-size: 15px;
+    font-weight: 600;
+
+    margin: auto;
+}
+
+#published {
+    margin: auto;
+    margin-left: 10px;
+    color: #2cc4be;
+    font-size: 15px;
+    font-weight: 600;
+
+    padding: 4px;
+    border-radius: 5px;
+
+
+    background-color: #032b3a;
+}
+
+
+.productionComment {
+    display: flex;
+
+    margin: auto;
+    margin-left: 0px;
+}
+
+#productionComment {
+    color: grey;
+    font-size: 15px;
+    font-weight: 600;
+
+    margin: auto;
+}
+
+#rightArrow {
+    position: absolute;
+    
+    right: 20px;
+}
+
+.lowOpacityBoxes {
+    display: flex;
+
+    margin-bottom: 50px;
+    gap: 20px;
+    
+    height: 220px;
+    width: 100%;
+}
+
+.column1, .column2 {
+    display: flex;
+    flex-direction: column;
+
+    margin: auto;
+    padding: 20px;
+
+    height: 100%;
+    width: 50%;
+}
+
+.short {
+    border-radius: 5px;
+    background-color: 
+#1a1f23;
+
+    margin: auto;
+    margin-left: 0px;
+
+    height: 25px;
+
+    width: 50%;
+}
+
+.medium {
+    border-radius: 5px;
+    background-color: #1a1f23;
+
+    margin: auto;
+    margin-left: 0px;
+
+    height: 25px;
+
+    width: 75%;
+}
+
+.long {
+    border-radius: 5px;
+    background-color: 
+#1a1f23;
+
+    margin: auto;
+    margin-left: 0px;
+
+    height: 25px;
+
+    width: 100%;
+}
+
+
+
+
+.contentBox {
+    display: flex;
+    flex-direction: column;
+
+    margin-bottom: 20px;
+
+    padding-left: 20px;
+    padding-right: 20px;
+
+    height: 170px;
+    width: 100%;
+}
+
+.contentTitle {
+    display: flex;
+    margin: auto;
+
+    width: 100%;
+}
+
+#contentTitle {
+    color: white;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.content {
+    display: flex;
+    margin: auto;
+    margin-top: 10px;
+
+    width: 100%;
+}
+
+#content {
+    color: #a4a8ad;
+    font-size: 15px;
+    font-weight: 600;
+
+}
+
+.learnMore {
+    display: flex;
+    margin: auto;
+    margin-top: 10px;
+
+    width: 100%;
+}
+
+#learnMore {
+    color: #2cc4be;
+    font-size: 15px;
+    font-weight: 600;
+    border-bottom: 1px solid #2cc4be;
+}
+
+#northEastArrow {
+    margin: auto;
+    margin-left: 10px;
+
+    height: 12px; 
+}
+/* BODY END */
+
+
+
+/* FOOTER START */
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    
+    margin: auto;
+    margin-top: 30px;
+
+    padding: 20px;
+
+    height: 120px;
+    width: 1200px;
+}
+
+.navBarTiny a {
+    text-decoration: none;
+    color: white;
+}
+
+.navBarTiny {
+    display: flex;
+
+    margin: auto;
+    margin-left: 0px;
+
+    gap: 20px;
+
+    height: 20px;
+    width: 30%;
+}
+
+#navlinkTiny {
+    color: #a4a8ad;
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.copyright {
+    display: flex;
+
+    margin: auto;
+    margin-left: 10px;
+
+    height: 20px;
+    width: 30%;
+}
+
+#copyright {
+    color: #a4a8ad;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* FOOTER START */
+}
+
+
+
+
+
+/* MEADI QUERY 700px END */
