@@ -1891,7 +1891,6 @@ body {
 
 @media (max-width: 700px) {
     .alphaContainer {
-        border: 1px solid white;
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
@@ -2114,7 +2113,6 @@ body {
     }
 
     .navBar1 {
-        border: 1px solid white;
         display: flex;
         flex-direction: column;
     
@@ -2264,7 +2262,6 @@ body {
     }
     
     .settingIcons {
-        border: 1px solid white;
     }
     
     #settingIcons {
@@ -2464,12 +2461,12 @@ body {
         flex-direction: column;
     
         margin: auto;
-        margin-left: 10px;
+        margin-left: 20px;
     
     
      
         height: 520px;
-        width: 390px;
+        width: 650px;
     }
     
     
@@ -2498,10 +2495,12 @@ body {
         flex-direction: column;
     
         margin: auto;
-        padding: 20px;
+        margin-left: 20px;
     
-        height: 540px;
-        width: 390px
+    
+     
+        height: 520px;
+        width: 650px;
     }
     
     #commitIcon {
@@ -2822,7 +2821,7 @@ body {
         display: flex;
     
         margin: auto;
-        margin-left: 0px;
+        margin-left: 10px;
 
         gap: 20px;
     
